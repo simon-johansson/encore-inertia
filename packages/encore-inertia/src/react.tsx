@@ -8,8 +8,11 @@ export function mountInertiaApp(config: MountInertiaAppConfig): void {
   const { pages, rootId = "app" } = config;
 
   createInertiaApp({
+    id: rootId,
     resolve: (name) => {
-      const key = Object.keys(pages).find((k) => k.includes(`/${name}.`));
+      const key = Object.keys(pages).find(
+        (k) => k.endsWith(`/${name}.tsx`) || k.endsWith(`/${name}.ts`) || k.endsWith(`/${name}.jsx`),
+      );
       if (!key) throw new Error(`Page not found: ${name}`);
       return pages[key] as any;
     },
