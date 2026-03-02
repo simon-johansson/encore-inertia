@@ -6,6 +6,7 @@
   "license": "MPL-2.0",
   "type": "module",
   "scripts": {
+    "build": "vite build",
     "test": "vitest",
     "dev:frontend": "vite dev"
   },
