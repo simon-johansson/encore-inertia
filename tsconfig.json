@@ -5,6 +5,7 @@
     "lib": ["ES2022"],
     "target": "ES2022",
     "module": "ES2022",
+    "jsx": "react-jsx",
     "types": ["node"],
     "paths": {
       "~encore/*": ["./encore.gen/*"]
