@@ -1,4 +1,3 @@
-// frontend/inertia.ts
 import { IncomingMessage, ServerResponse } from "node:http";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

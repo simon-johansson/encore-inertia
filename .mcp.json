@@ -1,0 +1,12 @@
+{
+    "mcpServers": {
+        "encore-mcp": {
+            "args": [
+                "mcp",
+                "run",
+                "--app=encore-inertia-my22"
+            ],
+            "command": "encore"
+        }
+    }
+}
