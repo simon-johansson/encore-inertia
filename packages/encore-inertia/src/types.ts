@@ -56,7 +56,7 @@ export interface ManifestChunk {
 }
 
 export interface MountInertiaAppConfig {
-  /** Result of import.meta.glob("./pages/**/*.tsx", { eager: true }) */
+  /** Result of import.meta.glob eager import for page components */
   pages: Record<string, unknown>;
 
   /** Root element ID. Default: "app" */
