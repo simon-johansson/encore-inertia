@@ -1,0 +1,49 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
+import type { InertiaAdapter, InertiaConfig, PageObject } from "./types.js";
+import { createAssetTagsResolver } from "./vite.js";
+import { createHtmlRenderer } from "./html.js";
+
+export type { InertiaAdapter, InertiaConfig, PageObject, MountInertiaAppConfig } from "./types.js";
+
+export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
+  const version = config.version ?? "1.0";
+
+  const getAssetTags = createAssetTagsResolver({
+    viteEntry: config.viteEntry,
+    devServerUrl: config.devServerUrl ?? "http://localhost:5173",
+    manifestPath: config.manifestPath ?? "frontend/dist/.vite/manifest.json",
+  });
+
+  const renderHtml = createHtmlRenderer({
+    title: config.title,
+    lang: config.lang,
+    rootId: config.rootId,
+    head: config.head,
+    renderHtml: config.renderHtml,
+  });
+
+  function render(
+    req: IncomingMessage,
+    res: ServerResponse,
+    component: string,
+    props: Record<string, unknown> = {},
+  ): void {
+    const url = req.url ?? "/";
+    const page: PageObject = { component, props, url, version };
+
+    if (req.headers["x-inertia"]) {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+        "X-Inertia": "true",
+        Vary: "X-Inertia",
+      });
+      res.end(JSON.stringify(page));
+      return;
+    }
+
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.end(renderHtml(page, getAssetTags()));
+  }
+
+  return { render, getAssetTags };
+}
