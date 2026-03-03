@@ -219,6 +219,8 @@ Add scripts to `package.json`:
 }
 ```
 
+The `"build": "vite build"` script is required for deploying to Encore Cloud — Encore runs `npm run build` during deployment to compile the frontend assets.
+
 **Development** (two terminals):
 
 ```bash
