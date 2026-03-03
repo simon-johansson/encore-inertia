@@ -1,32 +1,18 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    /* Basic Options */
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM"],
     "target": "ES2022",
     "module": "ES2022",
-    "jsx": "react-jsx",
-    "types": ["node"],
-    "paths": {
-      "~encore/*": ["./encore.gen/*"]
-    },
-
-    /* Workspace Settings */
-    "composite": true,
-
-    /* Strict Type-Checking Options */
-    "strict": true,
-
-    /* Module Resolution Options */
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "sourceMap": true,
-
+    "jsx": "react-jsx",
+    "strict": true,
     "declaration": true,
-
-    /* Advanced Options */
+    "isolatedModules": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  }
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src"]
 }

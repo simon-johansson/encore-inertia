@@ -38,11 +38,11 @@ export interface InertiaConfig {
 
 export interface InertiaAdapter {
   /** Render an Inertia response. Full HTML on first visit, JSON on X-Inertia requests. */
-  render(
+  render<P extends Record<string, any>>(
     req: IncomingMessage,
     res: ServerResponse,
-    component: string,
-    props?: Record<string, unknown>,
+    component: (props: P) => any,
+    ...args: {} extends P ? [props?: P] : [props: P]
   ): void;
 
   /** Get Vite asset tags string (<script> and <link> tags). */

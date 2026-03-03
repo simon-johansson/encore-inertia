@@ -1,0 +1,32 @@
+{
+  "name": "encore-ts-starter",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Encore Typescript Starter",
+  "license": "MPL-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "dev:frontend": "vite dev"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.2.2",
+    "vite": "^7.3.1",
+    "vitest": "^1.5.0"
+  },
+  "dependencies": {
+    "encore-inertia": "file:../",
+    "@inertiajs/react": "^2.3.17",
+    "encore.dev": "^1.54.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
+  }
+}

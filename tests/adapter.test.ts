@@ -9,6 +9,9 @@ vi.mock("node:fs", () => ({
   }),
 }));
 
+function Home(_props: { greeting: string }) { return null; }
+function About() { return null; }
+
 function createMockReq(overrides: Partial<IncomingMessage> = {}): IncomingMessage {
   return {
     url: "/",
@@ -51,7 +54,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq();
     const res = createMockRes();
 
-    inertia.render(req, res, "Home", { greeting: "Hello" });
+    inertia.render(req, res, Home, { greeting: "Hello" });
 
     expect(res._status).toBe(200);
     expect(res._headers["Content-Type"]).toBe("text/html");
@@ -65,7 +68,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq({ headers: { "x-inertia": "true" } });
     const res = createMockRes();
 
-    inertia.render(req, res, "About");
+    inertia.render(req, res, About);
 
     expect(res._status).toBe(200);
     expect(res._headers["Content-Type"]).toBe("application/json");
@@ -83,7 +86,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq({ headers: { "x-inertia": "true" } });
     const res = createMockRes();
 
-    inertia.render(req, res, "Home");
+    inertia.render(req, res, Home);
 
     const body = JSON.parse(res._body);
     expect(body.version).toBe("2.0");
@@ -94,7 +97,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq({ url: "/about?foo=bar", headers: { "x-inertia": "true" } });
     const res = createMockRes();
 
-    inertia.render(req, res, "About");
+    inertia.render(req, res, About);
 
     const body = JSON.parse(res._body);
     expect(body.url).toBe("/about?foo=bar");
@@ -105,7 +108,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq({ headers: { "x-inertia": "true" } });
     const res = createMockRes();
 
-    inertia.render(req, res, "Home");
+    inertia.render(req, res, Home);
 
     const body = JSON.parse(res._body);
     expect(body.props).toEqual({});
@@ -116,7 +119,7 @@ describe("createInertiaAdapter", () => {
     const req = createMockReq();
     const res = createMockRes();
 
-    inertia.render(req, res, "Home");
+    inertia.render(req, res, Home);
 
     expect(res._body).toContain("<title>My App</title>");
   });

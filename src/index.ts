@@ -25,11 +25,11 @@ export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
   function render(
     req: IncomingMessage,
     res: ServerResponse,
-    component: string,
+    component: (...args: any[]) => any,
     props: Record<string, unknown> = {},
   ): void {
     const url = req.url ?? "/";
-    const page: PageObject = { component, props, url, version };
+    const page: PageObject = { component: component.name, props, url, version };
 
     if (req.headers["x-inertia"]) {
       res.writeHead(200, {

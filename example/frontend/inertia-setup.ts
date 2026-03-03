@@ -1,4 +1,4 @@
-import { createInertiaAdapter } from "@encore/inertia";
+import { createInertiaAdapter } from "encore-inertia";
 
 export const inertia = createInertiaAdapter({
   viteEntry: "frontend/src/app.tsx",

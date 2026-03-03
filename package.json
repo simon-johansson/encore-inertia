@@ -1,32 +1,66 @@
 {
-  "name": "encore-ts-starter",
-  "private": true,
-  "version": "0.0.1",
-  "description": "Encore Typescript Starter",
-  "license": "MPL-2.0",
+  "name": "encore-inertia",
+  "version": "0.1.0",
+  "description": "Inertia.js adapter for Encore.ts applications",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    }
+  },
+  "files": ["dist"],
   "scripts": {
-    "build": "vite build",
-    "test": "vitest",
-    "dev:frontend": "vite dev"
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "@inertiajs/react": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true },
+    "@inertiajs/react": { "optional": true }
   },
   "devDependencies": {
-    "@types/node": "^20.5.7",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.4",
-    "typescript": "^5.2.2",
-    "vite": "^7.3.1",
-    "vitest": "^1.5.0"
+    "tsup": "^8.0.0",
+    "typescript": "^5.2.0",
+    "vitest": "^1.5.0",
+    "@types/node": "^20.5.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@inertiajs/react": "^2.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
-  "dependencies": {
-    "@encore/inertia": "file:packages/encore-inertia",
-    "@inertiajs/react": "^2.3.17",
-    "encore.dev": "^1.54.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+  "license": "MPL-2.0",
+  "author": "Simon Johansson",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simon-johansson/encore-inertia.git"
   },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
+  "homepage": "https://github.com/simon-johansson/encore-inertia#readme",
+  "bugs": {
+    "url": "https://github.com/simon-johansson/encore-inertia/issues"
+  },
+  "keywords": [
+    "encore",
+    "encore.ts",
+    "inertia",
+    "inertiajs",
+    "react",
+    "ssr",
+    "server-side-rendering"
+  ],
+  "engines": {
+    "node": ">=18"
   }
 }
