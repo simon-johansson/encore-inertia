@@ -4,6 +4,14 @@ Inertia.js adapter for [Encore.ts](https://encore.dev) applications. Build serve
 
 This library handles the [Inertia protocol](https://inertiajs.com/the-protocol) — full HTML responses on first visit, JSON responses on subsequent navigations — and integrates with Vite for asset loading in both development and production.
 
+## Claude Code Skill
+
+If you use [Claude Code](https://claude.com/claude-code), you can install this package's skill to give Claude knowledge of the `encore-inertia` API:
+
+```bash
+npx skills add simon-johansson/encore-inertia@encore-inertia
+```
+
 ## Installation
 
 ```bash

@@ -1,0 +1,18 @@
+# Source & config
+src/
+tests/
+tsconfig.json
+tsup.config.ts
+TODO.md
+
+# Example app
+example/
+
+# Docs
+docs/
+
+# Claude Code
+.claude/
+
+# Git
+.gitignore
