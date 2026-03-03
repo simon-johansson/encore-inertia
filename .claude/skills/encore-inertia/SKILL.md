@@ -143,6 +143,16 @@ export const assets = api.static({
 });
 ```
 
+### 7. Create the static assets directory
+
+Encore requires the `api.static` directory to exist at startup. Before running `encore run` for the first time, create it:
+
+```bash
+mkdir -p frontend/dist/assets
+```
+
+After that, `npm run build` (Vite) will populate it automatically.
+
 ## Client Setup
 
 ### 1. Mount the React app
@@ -274,6 +284,7 @@ my-app/
 | Forgetting `manifest: true` in Vite config | Required for production asset resolution |
 | `rootId` mismatch between server and client | Both default to `"app"` — only change if you set it in both places |
 | Calling `share()` after `render()` | `share()` must be called before `render()` |
+| `api.static` dir doesn't exist on first run | Run `mkdir -p frontend/dist/assets` before `encore run` |
 
 ## Peer Dependencies
 

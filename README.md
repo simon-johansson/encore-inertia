@@ -98,6 +98,14 @@ export const assets = api.static({
 });
 ```
 
+> **Note:** Encore requires the static assets directory to exist when starting the application. Before running `encore run` for the first time, create it with:
+>
+> ```bash
+> mkdir -p frontend/dist/assets
+> ```
+>
+> After that, running `npm run build` (Vite) will populate the directory automatically.
+
 ### 5. Set up the React client
 
 ```tsx
