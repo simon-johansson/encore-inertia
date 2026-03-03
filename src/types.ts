@@ -45,6 +45,9 @@ export interface InertiaAdapter {
     ...args: {} extends P ? [props?: P] : [props: P]
   ): void;
 
+  /** Merge shared data into every page response for this request. Can be called multiple times. */
+  share(req: IncomingMessage, data: Record<string, unknown>): void;
+
   /** Get Vite asset tags string (<script> and <link> tags). */
   getAssetTags(): string;
 }

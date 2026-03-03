@@ -10,8 +10,11 @@ interface AssetTagsOptions {
 
 export function createAssetTagsResolver(options: AssetTagsOptions): () => string {
   const { viteEntry, devServerUrl, manifestPath } = options;
+  let cached: string | undefined;
 
   return function getAssetTags(): string {
+    if (cached !== undefined) return cached;
+
     try {
       const fullPath = resolve(manifestPath);
       const manifest: Record<string, ManifestChunk> = JSON.parse(
@@ -26,8 +29,10 @@ export function createAssetTagsResolver(options: AssetTagsOptions): () => string
           tags += `\n    <link rel="stylesheet" href="/${cssFile}">`;
         }
       }
+      cached = tags;
       return tags;
     } catch {
+      // Don't cache dev server tags — manifest may appear later after a build
       return [
         `<script type="module" src="${devServerUrl}/@vite/client"></script>`,
         `<script type="module" src="${devServerUrl}/${viteEntry}"></script>`,

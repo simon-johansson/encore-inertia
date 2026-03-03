@@ -55,21 +55,25 @@ Use Encore's [raw endpoints](https://encore.dev/docs/ts/primitives/raw-endpoints
 // frontend/pages.ts
 import { api } from "encore.dev/api";
 import { inertia } from "./inertia-setup";
+import Home from "./src/pages/Home";
+import About from "./src/pages/About";
 
 export const home = api.raw(
   { expose: true, method: "GET", path: "/" },
   async (req, res) => {
-    inertia.render(req, res, "Home", { greeting: "Hello world!" });
+    inertia.render(req, res, Home, { greeting: "Hello world!" });
   },
 );
 
 export const about = api.raw(
   { expose: true, method: "GET", path: "/about" },
   async (req, res) => {
-    inertia.render(req, res, "About");
+    inertia.render(req, res, About);
   },
 );
 ```
+
+The `render` function is generic — it infers the props type from the component you pass. If `Home` expects `{ greeting: string }`, TypeScript will require you to pass those props. If `About` takes no props, the argument is optional.
 
 ### 4. Serve static assets
 
@@ -247,13 +251,35 @@ mountInertiaApp({
 });
 ```
 
+### Shared data
+
+Use `share()` to define props that are automatically merged into every page response for a given request. This is useful for data that many pages need, like the authenticated user or flash messages.
+
+```ts
+export const home = api.raw(
+  { expose: true, method: "GET", path: "/" },
+  async (req, res) => {
+    inertia.share(req, { user: { name: "Alice" } });
+    inertia.share(req, { flash: { success: "Welcome back!" } });
+
+    inertia.render(req, res, Home, { greeting: "Hello!" });
+    // props = { user: { name: "Alice" }, flash: { success: "Welcome back!" }, greeting: "Hello!" }
+  },
+);
+```
+
+- Call `share()` one or more times before `render()` — shared data accumulates across calls
+- Page-level props passed to `render()` take precedence over shared props
+- Shared data is scoped to the request and does not leak between requests
+
 ## API Reference
 
 ### `createInertiaAdapter(config): InertiaAdapter`
 
 Creates an adapter instance. Returns:
 
-- **`render(req, res, component, props?)`** — Handles the Inertia protocol. On first visit (no `X-Inertia` header), responds with a full HTML page. On subsequent navigations, responds with a JSON page object.
+- **`render<P>(req, res, component, props?)`** — Handles the Inertia protocol. Takes a component function (not a string name) and infers the props type `P` from it. Props are required when the component expects them and optional when it doesn't. On first visit (no `X-Inertia` header), responds with a full HTML page. On subsequent navigations, responds with a JSON page object.
+- **`share(req, data)`** — Merges `data` into shared props for this request. Can be called multiple times — entries accumulate. Shared props are merged under page props when `render()` is called, with page-level props taking precedence.
 - **`getAssetTags()`** — Returns the `<script>` and `<link>` tags string. In production, reads from the Vite manifest. In development, points to the Vite dev server.
 
 ### `mountInertiaApp(config): void`
@@ -287,7 +313,7 @@ my-app/
 ## How It Works
 
 1. A browser request hits an Encore raw endpoint
-2. The endpoint calls `inertia.render(req, res, "ComponentName", { props })`
+2. The endpoint calls `inertia.render(req, res, ComponentFunction, { props })`
 3. **First visit** (no `X-Inertia` header): the adapter responds with a full HTML page containing the Vite asset tags and the page object embedded in a `data-page` attribute
 4. **Subsequent navigation** (`X-Inertia` header present): the adapter responds with just the JSON page object, and the Inertia client-side library swaps the page component without a full reload
 

@@ -7,6 +7,7 @@ export type { InertiaAdapter, InertiaConfig, PageObject, MountInertiaAppConfig }
 
 export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
   const version = config.version ?? "1.0";
+  const sharedData = new WeakMap<IncomingMessage, Record<string, unknown>>();
 
   const getAssetTags = createAssetTagsResolver({
     viteEntry: config.viteEntry,
@@ -22,6 +23,11 @@ export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
     renderHtml: config.renderHtml,
   });
 
+  function share(req: IncomingMessage, data: Record<string, unknown>): void {
+    const existing = sharedData.get(req) ?? {};
+    sharedData.set(req, { ...existing, ...data });
+  }
+
   function render(
     req: IncomingMessage,
     res: ServerResponse,
@@ -29,7 +35,8 @@ export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
     props: Record<string, unknown> = {},
   ): void {
     const url = req.url ?? "/";
-    const page: PageObject = { component: component.name, props, url, version };
+    const mergedProps = { ...sharedData.get(req), ...props };
+    const page: PageObject = { component: component.name, props: mergedProps, url, version };
 
     if (req.headers["x-inertia"]) {
       res.writeHead(200, {
@@ -45,5 +52,5 @@ export function createInertiaAdapter(config: InertiaConfig): InertiaAdapter {
     res.end(renderHtml(page, getAssetTags()));
   }
 
-  return { render, getAssetTags };
+  return { render, share, getAssetTags };
 }

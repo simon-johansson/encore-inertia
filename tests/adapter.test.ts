@@ -123,4 +123,60 @@ describe("createInertiaAdapter", () => {
 
     expect(res._body).toContain("<title>My App</title>");
   });
+
+  describe("share()", () => {
+    it("merges shared data into rendered props", () => {
+      const inertia = createInertiaAdapter({ viteEntry: "src/app.tsx" });
+      const req = createMockReq({ headers: { "x-inertia": "true" } });
+      const res = createMockRes();
+
+      inertia.share(req, { user: "Alice" });
+      inertia.render(req, res, Home, { greeting: "Hi" });
+
+      const body = JSON.parse(res._body);
+      expect(body.props).toEqual({ user: "Alice", greeting: "Hi" });
+    });
+
+    it("accumulates data across multiple share() calls", () => {
+      const inertia = createInertiaAdapter({ viteEntry: "src/app.tsx" });
+      const req = createMockReq({ headers: { "x-inertia": "true" } });
+      const res = createMockRes();
+
+      inertia.share(req, { user: "Alice" });
+      inertia.share(req, { flash: "Success" });
+      inertia.render(req, res, Home);
+
+      const body = JSON.parse(res._body);
+      expect(body.props).toEqual({ user: "Alice", flash: "Success" });
+    });
+
+    it("page-level props override shared props", () => {
+      const inertia = createInertiaAdapter({ viteEntry: "src/app.tsx" });
+      const req = createMockReq({ headers: { "x-inertia": "true" } });
+      const res = createMockRes();
+
+      inertia.share(req, { greeting: "Shared" });
+      inertia.render(req, res, Home, { greeting: "Page" });
+
+      const body = JSON.parse(res._body);
+      expect(body.props.greeting).toBe("Page");
+    });
+
+    it("shared data does not leak between requests", () => {
+      const inertia = createInertiaAdapter({ viteEntry: "src/app.tsx" });
+      const req1 = createMockReq({ headers: { "x-inertia": "true" } });
+      const req2 = createMockReq({ headers: { "x-inertia": "true" } });
+      const res1 = createMockRes();
+      const res2 = createMockRes();
+
+      inertia.share(req1, { user: "Alice" });
+      inertia.render(req1, res1, Home);
+      inertia.render(req2, res2, Home);
+
+      const body1 = JSON.parse(res1._body);
+      const body2 = JSON.parse(res2._body);
+      expect(body1.props).toEqual({ user: "Alice" });
+      expect(body2.props).toEqual({});
+    });
+  });
 });

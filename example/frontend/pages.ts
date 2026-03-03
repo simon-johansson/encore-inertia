@@ -6,6 +6,9 @@ import About from "./src/pages/About";
 export const home = api.raw(
   { expose: true, method: "GET", path: "/" },
   async (req, res) => {
+    // Shared data is merged into every page response for this request
+    inertia.share(req, { appName: "My Encore App" });
+
     inertia.render(req, res, Home, { greeting: "Welcome to Encore + Inertia!" });
   },
 );
