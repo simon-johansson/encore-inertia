@@ -35,6 +35,13 @@ export function createAssetTagsResolver(options: AssetTagsOptions): () => string
       // Don't cache dev server tags — manifest may appear later after a build
       return [
         `<script type="module" src="${devServerUrl}/@vite/client"></script>`,
+        `<script type="module">
+      import RefreshRuntime from "${devServerUrl}/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>`,
         `<script type="module" src="${devServerUrl}/${viteEntry}"></script>`,
       ].join("\n    ");
     }
